@@ -1,13 +1,13 @@
 diff --git a/gradle.properties b/gradle.properties
-index 9b62abf..5f86b58 100644
+index 254845d..9dc582c 100644
 --- a/gradle.properties
 +++ b/gradle.properties
-@@ -6,7 +6,7 @@
- #     IdentityHashMap iteration-order non-determinism inside R8 (e.g. in
- #     KotlinClassMetadataReader, which decides whether to keep the Signature attribute
- #     on Kotlin generic lambda subclasses).
+@@ -2,7 +2,7 @@
+ # The determinstic debugging one is self-explanatory, but also not as far-reaching as you'd hope.
+ # The hashcode one uses a more determinstic hashcode (an incrementing counter).
+ # Paired with the threadPoolSize=1 below, this should give us what we need.
 -org.gradle.jvmargs=-Xmx12g -Xms256m -XX:MaxMetaspaceSize=1g -Dcom.android.tools.r8.deterministicdebugging=true -XX:+UnlockExperimentalVMOptions -XX:hashCode=3
 +org.gradle.jvmargs=-Xmx8g -Xms256m -XX:MaxMetaspaceSize=1g -Dcom.android.tools.r8.deterministicdebugging=true -XX:+UnlockExperimentalVMOptions -XX:hashCode=3
+ android.r8.threadPoolSize=1
  
  # Without this, the Kotlin compile daemon inherits -Xmx12g from org.gradle.jvmargs.
- kotlin.daemon.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=512m
