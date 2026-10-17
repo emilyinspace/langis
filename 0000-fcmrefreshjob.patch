@@ -1,8 +1,8 @@
 diff --git a/app/src/main/java/org/thoughtcrime/securesms/jobs/FcmRefreshJob.java b/app/src/main/java/org/thoughtcrime/securesms/jobs/FcmRefreshJob.java
-index 3a88faf..d42d1b2 100644
+index 3a88faf..ccca91a 100644
 --- a/app/src/main/java/org/thoughtcrime/securesms/jobs/FcmRefreshJob.java
 +++ b/app/src/main/java/org/thoughtcrime/securesms/jobs/FcmRefreshJob.java
-@@ -79,46 +79,46 @@ public class FcmRefreshJob extends BaseJob {
+@@ -79,7 +79,7 @@ public class FcmRefreshJob extends BaseJob {
  
      Log.i(TAG, "Reregistering FCM...");
  
@@ -11,12 +11,7 @@ index 3a88faf..d42d1b2 100644
      if (playServicesMissing) {
        Log.w(TAG, "Play Services are unavailable.");
      }
- 
--    Optional<String> token = FcmUtil.getToken(context);
-+    // Optional<String> token = FcmUtil.getToken(context);
- 
-     if (token.isPresent()) {
-       if (playServicesMissing) {
+@@ -91,68 +91,68 @@ public class FcmRefreshJob extends BaseJob {
          Log.w(TAG, "We were able to get a token despite Play Services being missing!");
        }
        
@@ -48,6 +43,7 @@ index 3a88faf..d42d1b2 100644
 -        AppDependencies.resetNetwork();
 -        AppDependencies.startNetwork();
 -      }
+-    } else {
 +      // String oldToken = SignalStore.account().getFcmToken();
 +
 +      // if (!token.get().equals(oldToken)) {
@@ -76,10 +72,13 @@ index 3a88faf..d42d1b2 100644
 +      //   AppDependencies.resetNetwork();
 +      //   AppDependencies.startNetwork();
 +      // }
-     } else {
++    // } else {
        throw new RetryLaterException(new IOException("Failed to retrieve a token."));
-     }
-@@ -128,31 +128,31 @@ public class FcmRefreshJob extends BaseJob {
+-    }
++    // }
+   }
+ 
+   @Override
    public void onFailure() {
      Log.w(TAG, "FCM reregistration failed after retry attempt exhaustion!");
  
@@ -101,11 +100,6 @@ index 3a88faf..d42d1b2 100644
 -               SignalStore.settings().getForceWebsocketMode() == ForceWebsocketMode.DISABLED_AUTOMATICALLY &&
 -               System.currentTimeMillis() - SignalStore.account().getFcmTokenLastSetTime() > TimeUnit.DAYS.toMillis(3))
 -    {
--      Log.w(TAG, "FCM has been failing for over 3 days despite Play Services being available. Auto-enabling forced websocket mode so the user can still get messages.");
--      SignalStore.settings().setForceWebsocketMode(ForceWebsocketMode.ENABLED_AUTOMATICALLY);
--      AppDependencies.resetNetwork();
--      AppDependencies.startNetwork();
--    } else if (SignalStore.settings().getForceWebsocketMode() == ForceWebsocketMode.DISABLED_BY_USER) {
 +    // PlayServicesUtil.PlayServicesStatus status = PlayServicesUtil.getPlayServicesStatus(context);
 +
 +    // if (status == PlayServicesUtil.PlayServicesStatus.MISSING) {
@@ -124,13 +118,15 @@ index 3a88faf..d42d1b2 100644
 +    //            SignalStore.settings().getForceWebsocketMode() == ForceWebsocketMode.DISABLED_AUTOMATICALLY &&
 +    //            System.currentTimeMillis() - SignalStore.account().getFcmTokenLastSetTime() > TimeUnit.DAYS.toMillis(3))
 +    // {
-+    //   Log.w(TAG, "FCM has been failing for over 3 days despite Play Services being available. Auto-enabling forced websocket mode so the user can still get messages.");
-+    //   SignalStore.settings().setForceWebsocketMode(ForceWebsocketMode.ENABLED_AUTOMATICALLY);
-+    //   AppDependencies.resetNetwork();
-+    //   AppDependencies.startNetwork();
-+    // } else if (SignalStore.settings().getForceWebsocketMode() == ForceWebsocketMode.DISABLED_BY_USER) {
-       Log.w(TAG, "FCM is failing, but the user has explicitly disabled forced websocket mode. Not auto-enabling.");
+       Log.w(TAG, "FCM has been failing for over 3 days despite Play Services being available. Auto-enabling forced websocket mode so the user can still get messages.");
+       SignalStore.settings().setForceWebsocketMode(ForceWebsocketMode.ENABLED_AUTOMATICALLY);
+       AppDependencies.resetNetwork();
+       AppDependencies.startNetwork();
+-    } else if (SignalStore.settings().getForceWebsocketMode() == ForceWebsocketMode.DISABLED_BY_USER) {
+-      Log.w(TAG, "FCM is failing, but the user has explicitly disabled forced websocket mode. Not auto-enabling.");
 -    }
++    // } else if (SignalStore.settings().getForceWebsocketMode() == ForceWebsocketMode.DISABLED_BY_USER) {
++    //   Log.w(TAG, "FCM is failing, but the user has explicitly disabled forced websocket mode. Not auto-enabling.");
 +    // }
    }
  
