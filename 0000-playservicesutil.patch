@@ -1,46 +1,66 @@
 diff --git a/core/util/src/main/java/org/signal/core/util/PlayServicesUtil.java b/core/util/src/main/java/org/signal/core/util/PlayServicesUtil.java
-index e341014..8774d30 100644
+index 25631f4..fe6a314 100644
 --- a/core/util/src/main/java/org/signal/core/util/PlayServicesUtil.java
 +++ b/core/util/src/main/java/org/signal/core/util/PlayServicesUtil.java
-@@ -22,41 +22,41 @@ public class PlayServicesUtil {
+@@ -30,41 +30,42 @@ public class PlayServicesUtil {
    }
  
    public static PlayServicesStatus getPlayServicesStatus(Context context) {
 -    int gcmStatus = 0;
-+    // int gcmStatus = 0;
- 
+-
 -    try {
 -      gcmStatus = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
 -    } catch (Throwable t) {
 -      Log.w(TAG, t);
--      return PlayServicesStatus.MISSING;
--    }
++    // int gcmStatus = 0;
++
 +    // try {
 +    //   gcmStatus = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
 +    // } catch (Throwable t) {
 +    //   Log.w(TAG, t);
 +    //   return PlayServicesStatus.MISSING;
 +    // }
- 
--    Log.i(TAG, "Play Services: " + gcmStatus);
++
 +    // Log.i(TAG, "Play Services: " + gcmStatus);
- 
--    switch (gcmStatus) {
--      case ConnectionResult.SUCCESS:
--        return PlayServicesStatus.SUCCESS;
--      case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
--        try {
--          ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo("com.google.android.gms", 0);
++
 +    // switch (gcmStatus) {
 +    //   case ConnectionResult.SUCCESS:
 +    //     return PlayServicesStatus.SUCCESS;
 +    //   case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
 +    //     try {
-+    //       ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo("com.google.android.gms", 0);
- 
--          if (applicationInfo != null && !applicationInfo.enabled) {
++    //       ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(PLAY_SERVICES_PACKAGE, 0);
++
 +    //       if (applicationInfo != null && !applicationInfo.enabled) {
-             return PlayServicesStatus.MISSING;
++    //         return PlayServicesStatus.MISSING;
++    //       }
++    //     } catch (PackageManager.NameNotFoundException e) {
++    //       Log.w(TAG, e);
++    //     }
++
++    //     return PlayServicesStatus.NEEDS_UPDATE;
++    //   case ConnectionResult.SERVICE_DISABLED:
++    //   case ConnectionResult.SERVICE_MISSING:
++    //   case ConnectionResult.SERVICE_INVALID:
++    //   case ConnectionResult.API_UNAVAILABLE:
++    //   case ConnectionResult.SERVICE_MISSING_PERMISSION:
++    //     return PlayServicesStatus.MISSING;
++    //   default:
++    //     return PlayServicesStatus.TRANSIENT_ERROR;
++    // }
+       return PlayServicesStatus.MISSING;
+-    }
+-
+-    Log.i(TAG, "Play Services: " + gcmStatus);
+-
+-    switch (gcmStatus) {
+-      case ConnectionResult.SUCCESS:
+-        return PlayServicesStatus.SUCCESS;
+-      case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
+-        try {
+-          ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(PLAY_SERVICES_PACKAGE, 0);
+-
+-          if (applicationInfo != null && !applicationInfo.enabled) {
+-            return PlayServicesStatus.MISSING;
 -          }
 -        } catch (PackageManager.NameNotFoundException e) {
 -          Log.w(TAG, e);
@@ -56,21 +76,6 @@ index e341014..8774d30 100644
 -      default:
 -        return PlayServicesStatus.TRANSIENT_ERROR;
 -    }
-+  //         }
-+  //       } catch (PackageManager.NameNotFoundException e) {
-+  //         Log.w(TAG, e);
-+  //       }
-+
-+  //       return PlayServicesStatus.NEEDS_UPDATE;
-+  //     case ConnectionResult.SERVICE_DISABLED:
-+  //     case ConnectionResult.SERVICE_MISSING:
-+  //     case ConnectionResult.SERVICE_INVALID:
-+  //     case ConnectionResult.API_UNAVAILABLE:
-+  //     case ConnectionResult.SERVICE_MISSING_PERMISSION:
-+  //       return PlayServicesStatus.MISSING;
-+  //     default:
-+  //       return PlayServicesStatus.TRANSIENT_ERROR;
-+  //   }
    }
  
- }
+   /** Opens the system app info screen for Play Services, where the user can enable it. */
